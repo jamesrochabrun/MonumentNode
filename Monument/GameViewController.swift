@@ -39,13 +39,31 @@ class GameViewController: UIViewController {
         
         let xTranslation = Float(gestureRecognize.translation(in: gestureRecognize.view!).x)
         
-        //HANDLE PAN GESTURE HERE
-        /////////////////////////
+        /// this will hide the node to display more tha 4..
+        switch gestureRecognize.state {
+        case .changed, .began:
+             scene.towerAttach.panBeginMoved(xTranslation)
+        default:
+            break
+        }
+        
         // rotation animation
-        let angle: Float = (xTranslation * Float.pi) / 700.0
+        /// define an angle
+        var angle: Float = (xTranslation * Float.pi) / 700.0
+        
+        /// define of its greater tha 45 degrees FLoat.pi is like 180 degrees
+        let angleRatio = angle / (Float._45)
+        angle += scene.towerAttach.rotationCurrent
         scene.towerAttach.rotation = SCNVector4(0, 1, 0, angle)
         
-        
+        switch gestureRecognize.state {
+//        case .began, .changed:
+           
+        case .ended, .cancelled:
+            scene.towerAttach.realign(angleRatio: angleRatio)
+        default:
+            break
+        }
     }
     
     override var shouldAutorotate: Bool {
@@ -70,3 +88,25 @@ class GameViewController: UIViewController {
     }
 
 }
+
+
+extension Float {
+    
+    static var _180: Float {
+        return Float.pi
+    }
+    
+    static var _90: Float {
+        return Float.pi / 2
+    }
+    
+    static var _45: Float {
+        return Float.pi / 4
+    }
+}
+
+
+
+
+
+
