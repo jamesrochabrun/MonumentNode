@@ -41,7 +41,7 @@ class GameViewController: UIViewController {
         
         /// this will hide the node to display more tha 4..
         switch gestureRecognize.state {
-        case .changed, .began:
+        case .began:
              scene.towerAttach.panBeginMoved(xTranslation)
         default:
             break

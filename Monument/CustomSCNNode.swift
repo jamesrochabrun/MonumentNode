@@ -37,11 +37,11 @@ class CustomSCNNode: SCNNode {
         if angleRatio > 1 && whatMenuSpot > 0 {
             rotationCurrent += Float._90
             rotationBounce = rotationCurrent + 0.05
-            whatMenuSpot -= whatMenuSpot
+            whatMenuSpot -= 1
         } else if angleRatio < -1 && whatMenuSpot < 9 {
             rotationCurrent -= Float._90
             rotationBounce = rotationCurrent - 0.05
-            whatMenuSpot += whatMenuSpot
+            whatMenuSpot += 1
         } else if angleRatio < 1 && angleRatio > -1 {
             rotationBounce = 0
         }
@@ -81,6 +81,8 @@ class CustomSCNNode: SCNNode {
             let nodeGet = self.childNode(withName: "MenuItem\(i)", recursively: true)
             if let node = nodeGet {
                 node.isHidden = !(i >= minToCheckAgainst && i <= maxToCheckAgainst)
+                
+                print("BOOLEAN = \(!(i >= minToCheckAgainst && i <= maxToCheckAgainst)) minToCheckAgainst = \(minToCheckAgainst) , maxToCheckAgainst = \(maxToCheckAgainst) whatMenuSpot = \(whatMenuSpot) ")
             }
         }
     }
