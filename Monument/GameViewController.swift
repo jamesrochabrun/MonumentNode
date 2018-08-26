@@ -16,6 +16,7 @@ class GameViewController: UIViewController {
     
     var sceneView: SCNView?
     let scene = MonumentScene(create: true)
+    let scene2 = SCNScene()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,8 @@ class GameViewController: UIViewController {
             let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
             view.addGestureRecognizer(panGesture)
             
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+            view.addGestureRecognizer(tapGesture)
         }
     }
     
@@ -57,8 +60,6 @@ class GameViewController: UIViewController {
         scene.towerAttach.rotation = SCNVector4(0, 1, 0, angle)
         
         switch gestureRecognize.state {
-//        case .began, .changed:
-           
         case .ended, .cancelled:
             scene.towerAttach.realign(angleRatio: angleRatio)
         default:
@@ -66,6 +67,13 @@ class GameViewController: UIViewController {
         }
     }
     
+    @objc func handleTap(gestureRecognize: UIPanGestureRecognizer) {
+
+        // MARK:- Changing scenes not good, this way not recommended, but we can use the node name etc, research more...
+        if let view = sceneView {
+            view.scene = scene2
+        }
+    }
     override var shouldAutorotate: Bool {
         return true
     }
