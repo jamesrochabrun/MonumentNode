@@ -36,9 +36,11 @@ class MonumentScene: SCNScene {
         towerAttach.addChildNode(towerNode)
         rootNode.addChildNode(towerAttach)
         
+        /// Animate Tower
+        animateTower()
     }
     
-    ///
+    /// Menu items
     private func addMenuNode(from menuItemScene: SCNScene, to towerAttach: CustomSCNNode,  at number: Int) {
         
         guard let menuItem1 = menuItemScene.rootNode.childNode(withName: "_\(number)", recursively: true) else { return }
@@ -60,10 +62,31 @@ class MonumentScene: SCNScene {
         emptyMenuitem.isHidden = number > 4
         
         towerAttach.addChildNode(emptyMenuitem)
+
     }
     
-    //ANIMATE SCNTRANSACTION HERE
-    /////////////////////////////
+    // ANIMATE SCNTRANSACTION HERE - doing a loop animation!
+    private func animateTower() {
+        
+        SCNTransaction.begin()
+        SCNTransaction.animationDuration = 2.0
+        SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        
+        towerAttach.position = SCNVector3(towerAttach.position.x, towerAttach.position.y + 0.1, towerAttach.position.z)
+        SCNTransaction.completionBlock = { [weak self] in
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 2.0
+            SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+
+            guard let strongSelf = self else { return }
+            strongSelf.towerAttach.position = SCNVector3(strongSelf.towerAttach.position.x, strongSelf.towerAttach.position.y - 0.1, strongSelf.towerAttach.position.z)
+            SCNTransaction.completionBlock = {
+                strongSelf.animateTower()
+            }
+            SCNTransaction.commit()
+        }
+        SCNTransaction.commit()
+    }
     
     func setupLightsAndCamera() {
     
